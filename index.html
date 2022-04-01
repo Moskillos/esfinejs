@@ -3,7 +3,10 @@
 // Da questa:
 // 1. Ritorna i Total Confirmed
 // 2. Ritorna la lista di tutte le Country (solo il nome)
-// 3. Ritrona solo il più alto per i Total Confirmed e i Toltal confirmed più basso -->
+// 3. Ritrona solo il più alto per i Total Confirmed e i Toltal confirmed più basso 
+
+2.Ritorna la lista di tutte le country, con name countrycode e totalconfirmed
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,52 +17,98 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <section class="first-side"></section>
+    <section class="second-side"></section>
 </body>
 </html>
 <script>
+
+const firstSide = document.querySelector('.first-side');
+const secondSide = document.querySelector('.second-side');
+firstSide.style.display = 'flex';
+const ul = document.createElement('ul');
+const ulCountry = document.createElement('ul');
+const titleConfirmed = document.createElement('h1');
+const titleCountry = document.createElement('h1');
+firstSide.append(ul);
+firstSide.append(ulCountry);
+ulCountry.append(titleCountry);
+ul.append(titleConfirmed);
+titleCountry.innerText = 'Country'
+titleConfirmed.innerText = 'Total confirmed';
+const div = document.createElement('div');
+firstSide.append(div);
+const maxConfirmed = document.createElement('h3');
+div.append(maxConfirmed);
+const ulArr = document.createElement('ul');
+secondSide.append(ulArr);
+
+
 async function api(){
     const response = await fetch('https://api.covid19api.com/summary');
     const json = await response.json();
-    console.log(json.Countries);
+    const obj =  json.Countries;
     const totalConfirmed = [];
-    const body = document.querySelector('body')
-
+    const countries = [];
+    
+    
+;
 
     
     json.Countries.forEach(element => {
-        totalConfirmed.push(element.TotalConfirmed);
-        
-        
-
-                
-    });
-
-    json.Countries.forEach(element => {
-         console.log(element.Countries)
-
-
-    });
-
-    console.log(totalConfirmed);
-    const tCMax = Math.max(...totalConfirmed);
-    const tCMin = Math.min(...totalConfirmed);
-    console.log(tCMax);
-    console.log(tCMin);
+        totalConfirmed.push(element.TotalConfirmed);               
+    }); 
+    
 
     function inHtml(){
+        
+
+
         totalConfirmed.forEach(element => {
-            const ul = document.createElement('ul');
-            const li = document.createElement('li');
-            body.append(ul);
+            const li = document.createElement('li');           
             ul.append(li);
             li.textContent = element;
         }
         )
+        for (let y of obj){
+        
+            const li = document.createElement('li');
+            ulCountry.append(li);                       
+            li.textContent = y.Country;
+        }
 
+        const tCMax = Math.max(...totalConfirmed);
+        const tCMin = Math.min(...totalConfirmed);
+        maxConfirmed.textContent = `Max Confirmed: ${tCMax} - Min Confirmed: ${tCMin}`;
+
+        
+    }
+    
+    function object(){
+        
+        const arrMap = obj.map(el => {
+            return {
+                Country: el.Country,
+                CountryCode: el.CountryCode,
+                TotalConfirmed: el.TotalConfirmed
+            }
+        })
+        
+        for (let y of arrMap){
+                       
+            const li = document.createElement('li');            
+            ulArr.append(li);
+            
+            li.innerText = JSON.stringify(y);
+            
+        }
+        
     }
 
-    inHtml()
+    inHtml();
+    object()
+    
+
 
     
 }
